@@ -9,24 +9,7 @@ $dotenv->load();
 
 require_once __DIR__ . '/../config/routes.php';
 
-
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
 $basePath = dirname($_SERVER['SCRIPT_NAME']);
-$uri = substr($uri, strlen($basePath));
 
-
-
-if (array_key_exists($uri, $routes)) {
-    $controller = $routes[$uri]['controller'];
-    $action = $routes[$uri]['action'];
-    
-
-    echo "<br>" . "Route found: $controller -> $action";
-
-
-} else {
-    http_response_code(404);
-    echo "404 Not Found";
-}
-
+$router = new App\Kernel\Router($routes, $basePath);
+$router->dispatch();
