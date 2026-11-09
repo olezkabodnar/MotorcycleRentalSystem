@@ -6,14 +6,13 @@ class Router
 {
     private $routes;
     private $basePath;
+    private $controllers;
 
-    public function __construct($routes, $basePath)
+    public function __construct($routes, $basePath, $controllers)
     {
-        $basePath = rtrim($basePath, '/');
         $this->routes = $routes;
-        $this->basePath = $basePath;
-
-
+        $this->basePath = rtrim($basePath, '/');
+        $this->controllers = $controllers;
     }
 
     public function dispatch()
@@ -25,16 +24,7 @@ class Router
         
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
         $uri = substr($uri, strlen($this->basePath)); // Remove the base path from the URI
-        $key = $method . ' ' . $uri;
 
-        if (array_key_exists($key, $this->routes)) { 
-            $controller = $this->routes[$key]['controller']; 
-            $action = $this->routes[$key]['action']; 
-            
-            echo "Route found: $controller -> $action";
-            return;
-        }
-        
         foreach ($this->routes as $routeKey => $route) { 
             $routeParts = explode(' ', $routeKey); 
             $routeMethod = $routeParts[0]; // Get the HTTP method from the route key
@@ -57,7 +47,7 @@ class Router
             // Check each segment of the route and URI to see if they match
             foreach ($routeSegments as $i => $segment) {
  
-                if (!empty($segment) && strpos($segment, '{') === 0) { 
+                if (strpos($segment, '{') === 0) {
                     $id = $uriSegments[$i];
                 } elseif ($segment !== $uriSegments[$i]) {
                     $matched = false;
@@ -66,7 +56,10 @@ class Router
             }
 
             if ($matched) {
-                echo "Matched route: $routeMethod $routePath with ID: $id"; 
+                $controller = $route['controller'];
+                $action = $route['action'];
+
+                $this->controllers[$controller]->$action($id);
                 return;
             }
         }
