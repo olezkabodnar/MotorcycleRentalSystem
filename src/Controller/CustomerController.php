@@ -15,10 +15,10 @@ class CustomerController
     }
 
     // GET /customers (was customers/view_customers.php)
-    public function index()
+    public function getCustomers()
     {
         $customers = $this->customerService->listCustomers();
 
-        return $this->view->render('customers/index', ['customers' => $customers]);
+           $this->view->render('customers/index', ['customers' => $customers]);
     }
 }
