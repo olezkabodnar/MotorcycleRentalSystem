@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-final class SetupTest extends TestCase
+class SetupTest extends TestCase
 {
-    public function testPhpUnitRuns(): void
+    public function testPhpUnitRuns()
     {
         $this->assertTrue(true);
     }
