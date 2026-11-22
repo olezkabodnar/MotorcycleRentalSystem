@@ -41,11 +41,11 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`CustNo`, `Surname`, `Forename`, `Email`, `LicenceNo`, `Status`) VALUES
-(10, 'Pidr', 'loh', 'dsdsdsdsd@lohpidr', 213312, 'A'),
-(27, 'Bodnar', 'Oleh', 'o231lezkabodnar@gmail.com', 1111123, 'A'),
-(30, 'Bodnar1`2', 'Oleh`12', 'olezkabodnar@gmail.com12', 312312, 'A'),
-(46, 'Barudi', 'Yunis', 'yunis@letsbeam.ie', 1234256, 'A'),
-(47, 'Bodnar2', 'Oleh2', 'olezkabodnar@gmail.com1', 3123, 'A');
+(10, 'Customer1', 'Test', 'test1@example.com', 213312, 'A'),
+(27, 'Customer2', 'Test', 'test2@example.com', 1111123, 'A'),
+(30, 'Customer3', 'Test', 'test3@example.com', 312312, 'A'),
+(46, 'Customer4', 'Test', 'test4@example.com', 1234256, 'A'),
+(47, 'Customer5', 'Test', 'test5@example.com', 3123, 'A');
 
 -- --------------------------------------------------------
 
