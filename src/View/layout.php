@@ -16,7 +16,7 @@
     <a href="../motorcycles/view_motorcycles.php" class="item">
         <i class="motorcycle icon"></i> Browse Motorcycles
     </a>
-    <a href="../reservations/view_reservations.php" class="item">
+    <a href="/MotorcycleRentalSystem/public/reservations" class="item">
         <i class="calendar alternate icon"></i> Bookings
     </a>
     <a href="/MotorcycleRentalSystem/public/customers" class="item">

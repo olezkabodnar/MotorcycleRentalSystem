@@ -9,4 +9,7 @@ $routes = [
     'POST /customers' => ['controller' => 'CustomerController', 'action' => 'createCustomer'],
     'PUT /customers/{id}' => ['controller' => 'CustomerController', 'action' => 'updateCustomer'],
     'DELETE /customers/{id}' => ['controller' => 'CustomerController', 'action' => 'deleteCustomer'],
+
+    //Reservation controller routes
+    'GET /reservations' => ['controller' => 'ReservationController', 'action' => 'getReservations'],
 ];
