@@ -54,32 +54,25 @@ class ReservationService
         return $price;
     }
 
+    public function preview($regNo, $start, $end, $extras)
+    {
+        $start = $this->dateOnly($start);
+        $end = $this->dateOnly($end);
+        $motorcycle = $this->checkBooking($regNo, $start, $end);
+
+        return $this->quote($motorcycle['Rate'], $start, $end, $extras);
+    }
+
     // REFACTORED: Long Method - validation, SQL and HTML were all mixed in create_reservation.php
     public function create($custNo, $regNo, $start, $end, $extras)
     {
         $start = $this->dateOnly($start);
         $end = $this->dateOnly($end);
-        $today = new DateTimeImmutable('today');
-
-        if ($end <= $start) {
-            throw new ValidationException('End date must be after start date.');
-        }
-        if ($start < $today) {
-            throw new ValidationException('Start date cannot be in the past.');
-        }
-
-        $motorcycle = $this->reservations->findMotorcycle($regNo);
-        if (!$motorcycle) {
-            throw new ValidationException('Motorcycle not found.');
-        }
+        $motorcycle = $this->checkBooking($regNo, $start, $end);
 
         $customer = $this->customers->findById($custNo);
         if (!$customer) {
             throw new ValidationException('Customer not found.');
-        }
-
-        if (!$this->reservations->isAvailable($regNo, $start, $end)) {
-            throw new ValidationException('This motorcycle is not available for the selected dates.');
         }
 
         $price = $this->quote($motorcycle['Rate'], $start, $end, $extras);
@@ -132,6 +125,29 @@ class ReservationService
                 $reservation['RegNo']
             ));
         }
+    }
+
+    private function checkBooking($regNo, $start, $end)
+    {
+        $today = new DateTimeImmutable('today');
+
+        if ($end <= $start) {
+            throw new ValidationException('End date must be after start date.');
+        }
+        if ($start < $today) {
+            throw new ValidationException('Start date cannot be in the past.');
+        }
+
+        $motorcycle = $this->reservations->findMotorcycle($regNo);
+        if (!$motorcycle) {
+            throw new ValidationException('Motorcycle not found.');
+        }
+
+        if (!$this->reservations->isAvailable($regNo, $start, $end)) {
+            throw new ValidationException('This motorcycle is not available for the selected dates.');
+        }
+
+        return $motorcycle;
     }
 
     // compare dates only: the legacy code used new DateTime() with the time, so "start today" was rejected
