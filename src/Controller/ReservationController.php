@@ -99,9 +99,12 @@ class ReservationController
 
     private function dateInput($name)
     {
-        $date = DateTimeImmutable::createFromFormat('!Y-m-d', $this->input($name));
-        if (!$date) {
-            throw new ValidationException('Please choose a start date and an end date.');
+        $value = $this->input($name);
+        $date = DateTimeImmutable::createFromFormat('!Y-m-d', $value);
+
+        // PHP turns 2027-02-30 into 2027-03-02, so the date must come back unchanged
+        if (!$date || $date->format('Y-m-d') !== $value) {
+            throw new ValidationException('Please choose a valid start date and end date.');
         }
         return $date;
     }

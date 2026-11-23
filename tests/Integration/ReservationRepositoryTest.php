@@ -139,12 +139,16 @@ class ReservationRepositoryTest extends TestCase
         ];
     }
 
-    private function deleteTestBookings()
+    // only the row this test created, extras first because of the foreign key
+    private function deleteBooking($id)
     {
-        // remove what the insert tests added, extras first because of the foreign key
-        $this->pdo->exec("DELETE re FROM reservation_extra re JOIN reservation r ON r.Reservation_Id = re.Reservation_Id
-                          WHERE r.RegNo = '25-WW-3344' AND r.StartDate = '2030-02-04'");
-        $this->pdo->exec("DELETE FROM reservation WHERE RegNo = '25-WW-3344' AND StartDate = '2030-02-04'");
+        $this->pdo->exec('DELETE FROM reservation_extra WHERE Reservation_Id = ' . (int) $id);
+        $this->pdo->exec('DELETE FROM reservation WHERE Reservation_Id = ' . (int) $id);
+    }
+
+    private function countReservations()
+    {
+        return (int) $this->pdo->query('SELECT COUNT(*) FROM reservation')->fetchColumn();
     }
 
     public function testInsertSavesTheReservationAndItsExtras()
@@ -159,7 +163,7 @@ class ReservationRepositoryTest extends TestCase
 
         $saved = $this->pdo->query('SELECT * FROM reservation WHERE Reservation_Id = ' . (int) $id)->fetch();
         $savedExtras = $this->pdo->query('SELECT ExtraId, Price FROM reservation_extra WHERE Reservation_Id = ' . (int) $id . ' ORDER BY ExtraId')->fetchAll();
-        $this->deleteTestBookings();
+        $this->deleteBooking($id);
 
         $this->assertIsInt($id);
         $this->assertSame('25-WW-3344', $saved['RegNo']);
@@ -176,6 +180,7 @@ class ReservationRepositoryTest extends TestCase
         $repository = $this->createRepository();
         // extra 99 does not exist, so the foreign key makes the second INSERT fail
         $extras = [new Extra('Ghost', '1.00', 'once', 99)];
+        $before = $this->countReservations();
 
         $failed = false;
         try {
@@ -184,11 +189,8 @@ class ReservationRepositoryTest extends TestCase
             $failed = true;
         }
 
-        $left = $this->pdo->query("SELECT COUNT(*) FROM reservation WHERE RegNo = '25-WW-3344' AND StartDate = '2030-02-04'")->fetchColumn();
-        $this->deleteTestBookings();
-
         $this->assertTrue($failed);
-        // transaction: the reservation row was rolled back as well
-        $this->assertSame(0, (int) $left);
+        // transaction: the reservation row was rolled back as well, nothing to clean up
+        $this->assertSame($before, $this->countReservations());
     }
 }
