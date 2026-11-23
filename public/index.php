@@ -17,8 +17,17 @@ $customerService = new App\Service\CustomerService($customerRepository);
 $view = new App\Kernel\View();
 $customerController = new App\Controller\CustomerController($customerService, $view);
 
+// Observer the email listeners get subscribed here once the mailer exists
+$dispatcher = new App\Event\EventDispatcher();
 
-$controllers = ['CustomerController' => $customerController];
+$reservationRepository = new App\Repository\ReservationRepository($pdo);
+$reservationService = new App\Service\ReservationService($reservationRepository, $customerRepository, new App\Pricing\PricingStrategyFactory(), $dispatcher);
+$reservationController = new App\Controller\ReservationController($reservationService, $view);
+
+$controllers = [
+    'CustomerController' => $customerController,
+    'ReservationController' => $reservationController,
+];
 
 $router = new App\Kernel\Router($routes, $basePath, $controllers);
 

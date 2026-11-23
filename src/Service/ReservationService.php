@@ -26,6 +26,11 @@ class ReservationService
         $this->dispatcher = $dispatcher;
     }
 
+    public function listReservations()
+    {
+        return $this->reservations->findAll();
+    }
+
     // REFACTORED: Long Method - price was calculated inside the 280-line create_reservation.php
     public function quote($rate, $start, $end, $extras)
     {
