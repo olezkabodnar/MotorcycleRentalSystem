@@ -22,7 +22,9 @@ $dispatcher = new App\Event\EventDispatcher();
 
 $reservationRepository = new App\Repository\ReservationRepository($pdo);
 $reservationService = new App\Service\ReservationService($reservationRepository, $customerRepository, new App\Pricing\PricingStrategyFactory(), $dispatcher);
-$reservationController = new App\Controller\ReservationController($reservationService, $view);
+$motorcycleRepository = new App\Repository\MotorcycleRepository($pdo);
+$extraRepository = new App\Repository\ExtraRepository($pdo);
+$reservationController = new App\Controller\ReservationController($reservationService, $customerService, $motorcycleRepository, $extraRepository, $view);
 
 $controllers = [
     'CustomerController' => $customerController,

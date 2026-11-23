@@ -12,4 +12,7 @@ $routes = [
 
     //Reservation controller routes
     'GET /reservations' => ['controller' => 'ReservationController', 'action' => 'getReservations'],
+    'GET /reservations/new' => ['controller' => 'ReservationController', 'action' => 'newReservation'],
+    'POST /reservations/preview' => ['controller' => 'ReservationController', 'action' => 'previewReservation'],
+    'POST /reservations' => ['controller' => 'ReservationController', 'action' => 'createReservation'],
 ];

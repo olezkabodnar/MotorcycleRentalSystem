@@ -22,7 +22,7 @@
     <a href="/MotorcycleRentalSystem/public/customers" class="item">
         <i class="users icon"></i> Customers
     </a>
-    <a href="../reservations/create_reservation.php" class="item">
+    <a href="/MotorcycleRentalSystem/public/reservations/new" class="item">
         <i class="plus circle icon"></i> New Rental
     </a>
 </div>

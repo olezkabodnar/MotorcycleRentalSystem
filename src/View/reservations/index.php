@@ -7,6 +7,16 @@
         </div>
     </h2>
 
+    <?php if ($data['created']): ?>
+        <div class="ui positive message">
+            Reservation #<?= htmlspecialchars($data['created']) ?> was created.
+        </div>
+    <?php endif; ?>
+
+    <a href="/MotorcycleRentalSystem/public/reservations/new" class="ui primary button">
+        <i class="plus circle icon"></i> New Rental
+    </a>
+
     <table class="ui celled table">
         <thead>
             <tr>
