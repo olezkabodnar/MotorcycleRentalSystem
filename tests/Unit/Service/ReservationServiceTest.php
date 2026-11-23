@@ -98,6 +98,23 @@ class ReservationServiceTest extends TestCase
         $this->assertCount(1, $price->describe());
     }
 
+    public function testQuoteAndSavedPriceMatchWhenDatesHaveATime()
+    {
+        $service = $this->createService();
+        $extras = [new Extra('Helmet', 5.00, 'per_day')];
+
+        // Mon 15:00 -> Tue 00:00 is less than 24 hours, but both methods must count 1 day
+        $start = new DateTimeImmutable('2030-01-07 15:00');
+        $end = new DateTimeImmutable('2030-01-08 00:00');
+
+        $quoted = $service->quote(50.00, $start, $end, $extras)->total();
+        $service->create(10, '25-KE-7788', $start, $end, $extras);
+
+        // 1 day x 50 + helmet 1 x 5
+        $this->assertSame(55.00, $quoted);
+        $this->assertSame($quoted, $this->reservations->saved[0]['Price']);
+    }
+
     // create()
 
     public function testEndBeforeStartIsRejected()

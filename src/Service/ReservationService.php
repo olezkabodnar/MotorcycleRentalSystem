@@ -29,6 +29,9 @@ class ReservationService
     // REFACTORED: Long Method - price was calculated inside the 280-line create_reservation.php
     public function quote($rate, $start, $end, $extras)
     {
+        $start = $this->dateOnly($start);
+        $end = $this->dateOnly($end);
+
         // Simple Factory picks the Strategy, BasePrice is its Context
         $strategy = $this->pricingFactory->create($start, $end);
         $price = new BasePrice($strategy, $rate, $start, $end);
@@ -49,9 +52,8 @@ class ReservationService
     // REFACTORED: Long Method - validation, SQL and HTML were all mixed in create_reservation.php
     public function create($custNo, $regNo, $start, $end, $extras)
     {
-        // compare dates only: the legacy code used new DateTime() with the time, so "start today" was rejected
-        $start = new DateTimeImmutable($start->format('Y-m-d'));
-        $end = new DateTimeImmutable($end->format('Y-m-d'));
+        $start = $this->dateOnly($start);
+        $end = $this->dateOnly($end);
         $today = new DateTimeImmutable('today');
 
         if ($end <= $start) {
@@ -125,5 +127,11 @@ class ReservationService
                 $reservation['RegNo']
             ));
         }
+    }
+
+    // compare dates only: the legacy code used new DateTime() with the time, so "start today" was rejected
+    private function dateOnly($date)
+    {
+        return new DateTimeImmutable($date->format('Y-m-d'));
     }
 }
