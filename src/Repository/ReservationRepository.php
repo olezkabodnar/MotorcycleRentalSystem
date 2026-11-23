@@ -20,8 +20,8 @@ class ReservationRepository
     {
         $sql = 'SELECT r.*, c.Forename, c.Surname, mm.Make, mm.Model
                 FROM reservation r
-                JOIN customer c ON r.CustNo = c.CustNo
-                JOIN makemodel mm ON r.MBcode = mm.MBcode
+                LEFT JOIN customer c ON r.CustNo = c.CustNo
+                LEFT JOIN makemodel mm ON r.MBcode = mm.MBcode
                 ORDER BY r.StartDate DESC, r.Reservation_Id DESC';
         $stmt = $this->pdo->query($sql);
 

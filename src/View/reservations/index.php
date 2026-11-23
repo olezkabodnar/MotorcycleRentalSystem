@@ -23,7 +23,13 @@
             <?php foreach ($data['reservations'] as $reservation) { ?>
                 <tr>
                     <td><?= htmlspecialchars($reservation->id) ?></td>
-                    <td><?= htmlspecialchars($reservation->customerName) ?></td>
+                    <td>
+                        <?php if ($reservation->customerName == ''): ?>
+                            <span class="ui grey text">Unknown customer</span>
+                        <?php else: ?>
+                            <?= htmlspecialchars($reservation->customerName) ?>
+                        <?php endif; ?>
+                    </td>
                     <td><?= htmlspecialchars($reservation->motorcycleName . ' (' . $reservation->regNo . ')') ?></td>
                     <td><?= htmlspecialchars($reservation->startDate) ?></td>
                     <td><?= htmlspecialchars($reservation->endDate) ?></td>
