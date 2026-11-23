@@ -125,6 +125,47 @@ class ReservationServiceTest extends TestCase
         $this->assertSame($quoted, $this->reservations->saved[0]['Price']);
     }
 
+    // preview()
+
+    public function testPreviewUsesTheMotorcycleRate()
+    {
+        $service = $this->createService();
+
+        // fake motorcycle rate is 50: Mon 7 Jan 2030 -> Tue 15 Jan = the worked example again
+        $price = $service->preview('25-KE-7788', new DateTimeImmutable('2030-01-07'), new DateTimeImmutable('2030-01-15'), $this->helmetAndInsurance());
+
+        $this->assertSame(405.00, $price->total());
+        // a preview saves nothing and sends no email
+        $this->assertCount(0, $this->reservations->saved);
+        $this->assertCount(0, $this->createdSpy->handled);
+    }
+
+    public function testPreviewRejectsBadDates()
+    {
+        $service = $this->createService();
+
+        $this->expectException(ValidationException::class);
+        $service->preview('25-KE-7788', new DateTimeImmutable('2030-01-10'), new DateTimeImmutable('2030-01-08'), []);
+    }
+
+    public function testPreviewRejectsABookedMotorcycle()
+    {
+        $service = $this->createService();
+        $this->reservations->available = false;
+
+        $this->expectException(ValidationException::class);
+        $service->preview('25-KE-7788', new DateTimeImmutable('2030-01-07'), new DateTimeImmutable('2030-01-09'), []);
+    }
+
+    public function testPreviewRejectsAnUnknownMotorcycle()
+    {
+        $service = $this->createService();
+        $this->reservations->motorcycle = false;
+
+        $this->expectException(ValidationException::class);
+        $service->preview('NO-SUCH-REG', new DateTimeImmutable('2030-01-07'), new DateTimeImmutable('2030-01-09'), []);
+    }
+
     // create()
 
     public function testEndBeforeStartIsRejected()
