@@ -46,6 +46,16 @@ class ReservationServiceTest extends TestCase
         ];
     }
 
+    // listReservations()
+
+    public function testListReturnsTheReservationsFromTheRepository()
+    {
+        $service = $this->createService();
+        $this->reservations->reservations = ['first', 'second'];
+
+        $this->assertSame(['first', 'second'], $service->listReservations());
+    }
+
     // quote()
 
     public function testWorkedExampleCostsFourHundredAndFive()

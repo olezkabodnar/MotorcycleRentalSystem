@@ -12,6 +12,11 @@ class FakeReservationRepository
     public $savedExtras = [];
     public $cancelled = [];
 
+    public function findAll()
+    {
+        return $this->reservations;
+    }
+
     public function findMotorcycle($regNo)
     {
         return $this->motorcycle;
