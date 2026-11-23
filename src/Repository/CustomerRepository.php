@@ -26,7 +26,18 @@ class CustomerRepository
         return $customers;
     }
 
-    // TODO: findById, create, update, delete
+    // returns false when there is no such customer
+    public function findById($custNo)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM customer WHERE CustNo = :custNo');
+        $stmt->execute(['custNo' => $custNo]);
 
+        $row = $stmt->fetch();
+        if (!$row) {
+            return false;
+        }
+        return new Customer($row);
+    }
 
+    // TODO: create, update, delete
 }
