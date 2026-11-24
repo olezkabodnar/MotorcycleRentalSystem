@@ -12,8 +12,9 @@ class ReservationCreated
     public $startDate;
     public $endDate;
     public $price;
+    public $motorcycleName;
 
-    public function __construct($reservationId, $customerName, $customerEmail, $regNo, $startDate, $endDate, $price)
+    public function __construct($reservationId, $customerName, $customerEmail, $regNo, $startDate, $endDate, $price, $motorcycleName)
     {
         $this->reservationId = $reservationId;
         $this->customerName = $customerName;
@@ -22,5 +23,6 @@ class ReservationCreated
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->price = $price;
+        $this->motorcycleName = $motorcycleName;
     }
 }

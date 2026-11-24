@@ -96,7 +96,8 @@ class ReservationService
             $regNo,
             $row['StartDate'],
             $row['EndDate'],
-            $row['Price']
+            $row['Price'],
+            $motorcycle['Make'] . ' ' . $motorcycle['Model']
         ));
 
         return $id;

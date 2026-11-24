@@ -17,7 +17,7 @@ class EventDispatcherTest extends TestCase
         $dispatcher->subscribe(ReservationCreated::class, $createdListener);
         $dispatcher->subscribe(ReservationCancelled::class, $cancelledListener);
 
-        $event = new ReservationCreated(12, 'Test Customer', 'test@example.com', '25-KE-7788', '2026-11-23', '2026-12-01', 405.00);
+        $event = new ReservationCreated(12, 'Test Customer', 'test@example.com', '25-KE-7788', '2026-11-23', '2026-12-01', 405.00, 'Yamaha MT-07');
         $dispatcher->dispatch($event);
 
         $this->assertSame([$event], $createdListener->handled);
@@ -32,7 +32,7 @@ class EventDispatcherTest extends TestCase
         $dispatcher->subscribe(ReservationCreated::class, $first);
         $dispatcher->subscribe(ReservationCreated::class, $second);
 
-        $event = new ReservationCreated(12, 'Test Customer', 'test@example.com', '25-KE-7788', '2026-11-23', '2026-12-01', 405.00);
+        $event = new ReservationCreated(12, 'Test Customer', 'test@example.com', '25-KE-7788', '2026-11-23', '2026-12-01', 405.00, 'Yamaha MT-07');
         $dispatcher->dispatch($event);
 
         // one event, many observers
