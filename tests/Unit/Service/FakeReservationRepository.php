@@ -6,7 +6,7 @@ namespace Tests\Unit\Service;
 class FakeReservationRepository
 {
     public $available = true;
-    public $motorcycle = ['RegNo' => '25-KE-7788', 'MBcode' => 'yam70', 'Rate' => 50.00];
+    public $motorcycle = ['RegNo' => '25-KE-7788', 'MBcode' => 'yam70', 'Make' => 'Yamaha', 'Model' => 'MT-07', 'Rate' => 50.00];
     public $reservations = [];
     public $saved = [];
     public $savedExtras = [];

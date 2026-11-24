@@ -17,8 +17,13 @@ $customerService = new App\Service\CustomerService($customerRepository);
 $view = new App\Kernel\View();
 $customerController = new App\Controller\CustomerController($customerService, $view);
 
-// Observer the email listeners get subscribed here once the mailer exists
+// Adapter: PHPMailer behind our MailerInterface, settings from .env
+$mailer = new App\Mail\PhpMailerAdapter($_ENV['MAIL_HOST'], $_ENV['MAIL_PORT'], $_ENV['MAIL_USERNAME'], $_ENV['MAIL_PASSWORD'], $_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
+
+// Observer: each listener reacts to one reservation event and sends its email
 $dispatcher = new App\Event\EventDispatcher();
+$dispatcher->subscribe(App\Event\ReservationCreated::class, new App\Event\SendConfirmationEmail($mailer));
+$dispatcher->subscribe(App\Event\ReservationCancelled::class, new App\Event\SendCancellationEmail($mailer));
 
 $reservationRepository = new App\Repository\ReservationRepository($pdo);
 $reservationService = new App\Service\ReservationService($reservationRepository, $customerRepository, new App\Pricing\PricingStrategyFactory(), $dispatcher);

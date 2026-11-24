@@ -26,10 +26,10 @@ class ConfirmationEmail implements EmailMessage
     {
         $body = 'Dear ' . $this->event->customerName . ",\n\n";
         $body .= 'Your reservation #' . $this->event->reservationId . " is confirmed.\n\n";
-        $body .= 'Motorcycle: ' . $this->event->regNo . "\n";
+        $body .= 'Motorcycle: ' . $this->event->motorcycleName . ' (' . $this->event->regNo . ")\n";
         $body .= 'From: ' . $this->event->startDate . "\n";
         $body .= 'To: ' . $this->event->endDate . "\n";
-        $body .= 'Total price: EUR ' . number_format($this->event->price, 2) . "\n\n";
+        $body .= 'Total price: €' . number_format($this->event->price, 2) . "\n\n";
         $body .= 'MotoRent';
 
         return $body;

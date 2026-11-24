@@ -13,7 +13,7 @@ class SendConfirmationEmailTest extends TestCase
 {
     private function createdEvent()
     {
-        return new ReservationCreated(12, 'Test Customer', 'test@example.com', '25-KE-7788', '2026-11-23', '2026-12-01', 405.00);
+        return new ReservationCreated(12, 'Test Customer', 'test@example.com', '25-KE-7788', '2026-11-23', '2026-12-01', 405.00, 'Yamaha MT-07');
     }
 
     public function testSendsTheConfirmationEmail()
