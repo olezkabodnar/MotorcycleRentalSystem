@@ -2,6 +2,8 @@
 
 namespace App\Kernel;
 
+use App\Exception\NotFoundException;
+
 class Router
 {
     private $routes;
@@ -59,12 +61,16 @@ class Router
                 $controller = $route['controller'];
                 $action = $route['action'];
 
+                // a route can exist before its controller method is written
+                if (!isset($this->controllers[$controller]) || !method_exists($this->controllers[$controller], $action)) {
+                    throw new NotFoundException($method . ' ' . $uri . ' has no ' . $controller . '::' . $action . '()');
+                }
+
                 $this->controllers[$controller]->$action($id);
                 return;
             }
         }
 
-        http_response_code(404);
-        echo "404 Not Found";
+        throw new NotFoundException('No route for ' . $method . ' ' . $uri);
     }
 }
